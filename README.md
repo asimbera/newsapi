@@ -1,39 +1,67 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# News API
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+A dart library for News API from newsapi.org.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+- Get an API key at https://newsapi.org.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+Initialize the client
 
 ```dart
-const like = 'sample';
+import 'package:dio/dio.dart';
+import 'package:newsapi/newsapi.dart';
+
+// Initialize the client maually (you must have to provide apiKey either with dio's BaseOptions or with apiKey param in each request).
+var dio = Dio();
+var api = NewsApi(dio);
+
+// Initialize client with api key
+var api = NewsApi.withApiKey("<your key here>");
+```
+
+### Everything
+
+Search every article published by over 80,000 different sources large and small in the last 4 years.
+
+All the params are optional but you must have to provide one param otherwise the api will return error.
+
+```dart
+var resp = await api.everything(q: 'bitcoin');
+print("Status: ${resp.status}");
+print("Total Results: ${resp.totalResults}");
+print("Articles: ${resp.articles}");
+```
+
+### Top Headlines
+
+Returns breaking news headlines for countries, categories, and singular publishers. This is perfect for use with news tickers or anywhere you want to use live up-to-date news headlines.
+
+All the params are optional but you must have to provide one param otherwise the api will return error.
+
+```dart
+var resp = await api.topHeadlines(country: 'us');
+print("Status: ${resp.status}");
+print("Total Results: ${resp.totalResults}");
+print("Articles: ${resp.articles}");
+```
+
+### Sources
+
+Returns information (including name, description, and category) about the most notable sources available for obtaining top headlines from. This list could be piped directly through to your users when showing them some of the options available.
+
+```dart
+var sources = await api.sources();
+print("Status: ${sources.status}");
+print("Total Sources: ${sources.sources?.length}");
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+Know more about the api at <https://newsapi.org>
+
+## License
+
+MIT License
